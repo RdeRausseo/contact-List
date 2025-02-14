@@ -1,25 +1,42 @@
-import logo from '../logo.svg'
+import React, { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Context } from "../store/appContext.js";
+import SingleContact from "./singleContact.jsx";
 import '../App.css';
 
 function App() {
+
+const { store, actions } = useContext(Context);
+
+  useEffect(() => {
+    actions.getContacts();
+  }, []);
+
+  console.log(store.contactList);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-8 col-md-10">
+            <div className="text-end my-2">
+              <Link to="/add" type="button" className="btn btn-success">
+                Agregar Contacto
+              </Link>
+            </div>
+
+            <ul className="mb-3">
+              {store.contactList &&
+                store.contactList.length > 0 &&
+                store.contactList.map((contact, index) => {
+                  return <SingleContact contact={contact} key={index} />;
+                })}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </>
   );
-}
+};
 
 export default App;
